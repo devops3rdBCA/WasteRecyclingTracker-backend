@@ -1,3 +1,5 @@
+## DevOps Pull Request Update
+This update was added to demonstrate pull request workflow.
 # Waste Recycling Tracker – Spring Boot Backend
 
 This is the **Spring Boot backend** for the Waste Recycling Tracker project.
@@ -283,4 +285,5 @@ This project includes **SonarCloud configuration** for code quality analysis and
 
 Developed by **Jeynisha E**
 BCA Student | Aspiring Full Stack Developer
+
 
