@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserManagementService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Waste Recycling Tracker Backend</a> &gt; <a href="index.source.html" class="el_package">com.wasterecyclingtracker.service</a> &gt; <span class="el_source">UserManagementService.java</span></div><h1>UserManagementService.java</h1><pre class="source lang-java linenums">package com.wasterecyclingtracker.service;
+
+import com.wasterecyclingtracker.entity.User;
+import com.wasterecyclingtracker.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L13">@RequiredArgsConstructor</span>
+public class UserManagementService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    /**
+     * Create a new user
+     */
+    public User createUser(String username, String password, User.UserRole role) {
+        // Check if user already exists
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        if (userRepository.findByUsername(username).isPresent()) {</span>
+<span class="nc" id="L25">            throw new RuntimeException(&quot;User already exists: &quot; + username);</span>
+        }
+
+<span class="fc" id="L28">        User user = new User();</span>
+<span class="fc" id="L29">        user.setUsername(username);</span>
+<span class="fc" id="L30">        user.setPassword(passwordEncoder.encode(password));</span>
+<span class="fc" id="L31">        user.setRole(role);</span>
+<span class="fc" id="L32">        return userRepository.save(user);</span>
+    }
+
+    /**
+     * Get all users
+     */
+    public List&lt;User&gt; getAllUsers() {
+<span class="fc" id="L39">        return userRepository.findAll();</span>
+    }
+
+    /**
+     * Get user by username
+     */
+    public Optional&lt;User&gt; getUserByUsername(String username) {
+<span class="nc" id="L46">        return userRepository.findByUsername(username);</span>
+    }
+
+    /**
+     * Get user by ID
+     */
+    public Optional&lt;User&gt; getUserById(Long id) {
+<span class="nc" id="L53">        return userRepository.findById(id);</span>
+    }
+
+    /**
+     * Update user
+     */
+    public User updateUser(Long id, String password, User.UserRole role) {
+<span class="nc" id="L60">        User user = userRepository.findById(id)</span>
+<span class="nc" id="L61">                .orElseThrow(() -&gt; new RuntimeException(&quot;User not found with id: &quot; + id));</span>
+
+<span class="nc bnc" id="L63" title="All 4 branches missed.">        if (password != null &amp;&amp; !password.isEmpty()) {</span>
+<span class="nc" id="L64">            user.setPassword(passwordEncoder.encode(password));</span>
+        }
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (role != null) {</span>
+<span class="nc" id="L67">            user.setRole(role);</span>
+        }
+
+<span class="nc" id="L70">        return userRepository.save(user);</span>
+    }
+
+    /**
+     * Delete user
+     */
+    public void deleteUser(Long id) {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (!userRepository.existsById(id)) {</span>
+<span class="nc" id="L78">            throw new RuntimeException(&quot;User not found with id: &quot; + id);</span>
+        }
+<span class="nc" id="L80">        userRepository.deleteById(id);</span>
+<span class="nc" id="L81">    }</span>
+
+    /**
+     * Get all family users
+     */
+    public List&lt;User&gt; getFamilyUsers() {
+<span class="nc" id="L87">        return userRepository.findByRole(User.UserRole.FAMILY);</span>
+    }
+
+    /**
+     * Get all center users
+     */
+    public List&lt;User&gt; getCenterUsers() {
+<span class="nc" id="L94">        return userRepository.findByRole(User.UserRole.CENTER);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

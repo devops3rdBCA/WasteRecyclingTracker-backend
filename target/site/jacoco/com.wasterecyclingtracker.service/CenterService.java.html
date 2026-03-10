@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CenterService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Waste Recycling Tracker Backend</a> &gt; <a href="index.source.html" class="el_package">com.wasterecyclingtracker.service</a> &gt; <span class="el_source">CenterService.java</span></div><h1>CenterService.java</h1><pre class="source lang-java linenums">package com.wasterecyclingtracker.service;
+
+import com.wasterecyclingtracker.entity.FamilyWaste;
+import com.wasterecyclingtracker.repository.FamilyWasteRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+<span class="fc" id="L11">@RequiredArgsConstructor</span>
+public class CenterService {
+
+    private final FamilyWasteRepository familyWasteRepository;
+
+    /**
+     * Get all waste entries from all families
+     */
+    public List&lt;FamilyWaste&gt; getAllEntries() {
+<span class="nc" id="L20">        return familyWasteRepository.findAll();</span>
+    }
+
+    /**
+     * Update the status of a waste entry
+     */
+    public FamilyWaste updateEntryStatus(Long id, FamilyWaste.WasteStatus status) {
+<span class="nc" id="L27">        return familyWasteRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L28">            existing.setStatus(status);</span>
+<span class="nc" id="L29">            return familyWasteRepository.save(existing);</span>
+<span class="nc" id="L30">        }).orElseThrow(() -&gt; new RuntimeException(&quot;Waste entry not found with id: &quot; + id));</span>
+    }
+
+    /**
+     * Delete a recycled entry
+     */
+    public void deleteRecycledEntry(Long id) {
+<span class="nc" id="L37">        FamilyWaste waste = familyWasteRepository.findById(id)</span>
+<span class="nc" id="L38">                .orElseThrow(() -&gt; new RuntimeException(&quot;Waste entry not found with id: &quot; + id));</span>
+
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (waste.getStatus() != FamilyWaste.WasteStatus.RECYCLED) {</span>
+<span class="nc" id="L41">            throw new RuntimeException(&quot;Only recycled entries can be deleted&quot;);</span>
+        }
+
+<span class="nc" id="L44">        familyWasteRepository.deleteById(id);</span>
+<span class="nc" id="L45">    }</span>
+
+    /**
+     * Get entries by status
+     */
+    public List&lt;FamilyWaste&gt; getEntriesByStatus(FamilyWaste.WasteStatus status) {
+<span class="nc" id="L51">        return familyWasteRepository.findByStatus(status);</span>
+    }
+
+    /**
+     * Get entries by family name
+     */
+    public List&lt;FamilyWaste&gt; getEntriesByFamilyName(String familyName) {
+<span class="nc" id="L58">        return familyWasteRepository.findByFamilyName(familyName);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

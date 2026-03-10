@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailNotificationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Waste Recycling Tracker Backend</a> &gt; <a href="index.source.html" class="el_package">com.wasterecyclingtracker.service</a> &gt; <span class="el_source">EmailNotificationService.java</span></div><h1>EmailNotificationService.java</h1><pre class="source lang-java linenums">package com.wasterecyclingtracker.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Service
+<span class="fc" id="L9">@RequiredArgsConstructor</span>
+public class EmailNotificationService {
+
+<span class="fc" id="L12">    private static final Logger logger = LoggerFactory.getLogger(EmailNotificationService.class);</span>
+
+    /**
+     * Send notification when waste status changes
+     * In production, use JavaMailSender with SMTP configuration
+     */
+    public void sendStatusChangeNotification(String familyName, String wasteType, String oldStatus, String newStatus) {
+<span class="nc" id="L19">        String message = String.format(</span>
+                &quot;Dear %s,\n\n&quot; +
+                &quot;Your waste entry has been updated:\n&quot; +
+                &quot;Waste Type: %s\n&quot; +
+                &quot;Status: %s → %s\n\n&quot; +
+                &quot;Thank you for your contribution to recycling!\n&quot; +
+                &quot;Best regards,\nWaste Recycling Tracker Team&quot;,
+                familyName, wasteType, oldStatus, newStatus
+        );
+
+        // Log the notification (in production, send via email)
+<span class="nc" id="L30">        logger.info(&quot;NOTIFICATION: {}&quot;, message);</span>
+<span class="nc" id="L31">    }</span>
+
+    /**
+     * Send notification when waste is ready for pickup
+     */
+    public void sendPickupNotification(String familyName, Double quantity) {
+<span class="nc" id="L37">        String message = String.format(</span>
+                &quot;Dear %s,\n\n&quot; +
+                &quot;Your waste collection is scheduled!\n&quot; +
+                &quot;Total Quantity: %.2f kg\n\n&quot; +
+                &quot;Please have your waste ready for pickup.\n&quot; +
+                &quot;Best regards,\nWaste Recycling Tracker Team&quot;,
+                familyName, quantity
+        );
+
+<span class="nc" id="L46">        logger.info(&quot;PICKUP NOTIFICATION: {}&quot;, message);</span>
+<span class="nc" id="L47">    }</span>
+
+    /**
+     * Send notification when waste is recycled
+     */
+    public void sendRecyclingCompletedNotification(String familyName, String wasteType, Double quantity) {
+<span class="nc" id="L53">        String message = String.format(</span>
+                &quot;Dear %s,\n\n&quot; +
+                &quot;Your waste has been successfully recycled!\n&quot; +
+                &quot;Waste Type: %s\n&quot; +
+                &quot;Quantity: %.2f kg\n\n&quot; +
+                &quot;Thank you for contributing to environmental conservation!\n&quot; +
+                &quot;Best regards,\nWaste Recycling Tracker Team&quot;,
+                familyName, wasteType, quantity
+        );
+
+<span class="nc" id="L63">        logger.info(&quot;RECYCLING COMPLETED NOTIFICATION: {}&quot;, message);</span>
+<span class="nc" id="L64">    }</span>
+
+    /**
+     * Send summary report to family
+     */
+    public void sendWeeklySummary(String familyName, Long totalEntries, Double totalQuantity) {
+<span class="nc" id="L70">        String message = String.format(</span>
+                &quot;Dear %s,\n\n&quot; +
+                &quot;Your Weekly Waste Summary:\n&quot; +
+                &quot;Total Entries: %d\n&quot; +
+                &quot;Total Quantity: %.2f kg\n\n&quot; +
+                &quot;Keep up the good work!\n&quot; +
+                &quot;Best regards,\nWaste Recycling Tracker Team&quot;,
+                familyName, totalEntries, totalQuantity
+        );
+
+<span class="nc" id="L80">        logger.info(&quot;WEEKLY SUMMARY: {}&quot;, message);</span>
+<span class="nc" id="L81">    }</span>
+
+    /**
+     * Send admin alert for pending entries
+     */
+    public void sendAdminAlert(Long pendingCount, Long totalQuantity) {
+<span class="nc" id="L87">        String message = String.format(</span>
+                &quot;Admin Alert:\n\n&quot; +
+                &quot;Pending waste entries: %d\n&quot; +
+                &quot;Total quantity waiting for processing: %d kg\n\n&quot; +
+                &quot;Please review and process these entries.\n&quot; +
+                &quot;Best regards,\nWaste Recycling Tracker System&quot;,
+                pendingCount, totalQuantity
+        );
+
+<span class="nc" id="L96">        logger.info(&quot;ADMIN ALERT: {}&quot;, message);</span>
+<span class="nc" id="L97">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
