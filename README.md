@@ -6,7 +6,7 @@ It provides REST APIs for managing recyclable waste entries submitted by familie
 The backend is built using **Spring Boot, JPA, and Hibernate**, and uses an **H2 in-memory database** for development and testing.
 
 ---
-
+Updated backend documentation
 ## Features
 
 * RESTful API for waste recycling management
@@ -283,3 +283,4 @@ This project includes **SonarCloud configuration** for code quality analysis and
 
 Developed by **Jeynisha E**
 BCA Student | Aspiring Full Stack Developer
+
