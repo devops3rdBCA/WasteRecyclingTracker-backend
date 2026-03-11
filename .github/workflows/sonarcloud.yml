@@ -1,0 +1,38 @@
+name: SonarCloud (Backend)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  build:
+    name: Build & SonarCloud analyze
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+          cache: "maven"
+
+      - name: Build + Test + SonarCloud scan (Maven)
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B -V clean verify sonar:sonar \
+            -Dsonar.organization=devops3rdbca \
+            -Dsonar.projectKey=devops3rdBCA_WasteRecyclingTracker-backend \
+            -Dsonar.host.url=https://sonarcloud.io
