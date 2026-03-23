@@ -15,35 +15,57 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    /**
-     * Configure security rules for role-based access
-     * FAMILY role → access /api/family/*
-     * CENTER role → access /api/center/*
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // Disable CSRF (for APIs)
                 .csrf(csrf -> csrf.disable())
+
+                // Enable CORS
                 .cors(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // ❌ Disable default login (VERY IMPORTANT)
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .formLogin(form -> form.disable())
+
+                // Stateless session (for REST API)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // Authorization rules
                 .authorizeHttpRequests(authz -> authz
+                        // Allow preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Public endpoints
                         .requestMatchers("/", "/error", "/h2-console/**", "/actuator/health").permitAll()
+                        .requestMatchers("/reset-family-password").permitAll()
+
+                        // ✅ Allow login API (IMPORTANT)
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // Role-based access
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/statistics/family/**").hasAnyRole("FAMILY", "CENTER", "ADMIN")
                         .requestMatchers("/api/statistics/**").hasAnyRole("CENTER", "ADMIN")
                         .requestMatchers("/api/notifications/**").hasAnyRole("CENTER", "ADMIN")
                         .requestMatchers("/api/center/**").hasAnyRole("CENTER", "ADMIN")
                         .requestMatchers("/api/family/**").hasAnyRole("FAMILY", "ADMIN")
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().authenticated()
+
+                        // All other requests allowed
+                        .anyRequest().permitAll()
                 )
-                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
+
+                // Fix for H2 console
+                .headers(headers ->
+                        headers.frameOptions(frameOptions -> frameOptions.sameOrigin())
+                );
 
         return http.build();
     }
 
+    // Password encoder (for login)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

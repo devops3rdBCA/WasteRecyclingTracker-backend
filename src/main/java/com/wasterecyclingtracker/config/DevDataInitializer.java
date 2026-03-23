@@ -42,6 +42,8 @@ public class DevDataInitializer {
             createUserIfMissing(adminUsername, adminPassword, User.UserRole.ADMIN);
             createUserIfMissing(familyUsername, familyPassword, User.UserRole.FAMILY);
             createUserIfMissing(centerUsername, centerPassword, User.UserRole.CENTER);
+
+            // Removed faulty automatic password reset logic. Use the REST endpoint for password resets.
         };
     }
 
