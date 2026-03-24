@@ -16,11 +16,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Debug: Check if PERSONAL_TOKEN secret is available
+      - name: Check if PERSONAL_TOKEN secret is available
+        run: |
+          if [ -z "${{ secrets.PERSONAL_TOKEN }}" ]; then
+            echo "PERSONAL_TOKEN is NOT set!"
+            exit 1
+          else
+            echo "PERSONAL_TOKEN is set and available."
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUBACTIONS }}   # <-- use your new token here
+          token: ${{ secrets.PERSONAL_TOKEN }}   # Use your PAT consistently
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -31,7 +41,7 @@ jobs:
 
       - name: Build + Test + SonarCloud scan (Maven)
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # <-- keep your SonarCloud token here
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Keep your SonarCloud token here
         run: |
           mvn -B -V clean verify sonar:sonar \
             -Dsonar.organization=devops3rdbca \
