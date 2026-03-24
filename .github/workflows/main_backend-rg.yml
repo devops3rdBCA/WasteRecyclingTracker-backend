@@ -14,6 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Debug: Check if PERSONAL_TOKEN secret is available
+      - name: Check if PERSONAL_TOKEN secret is available
+        run: |
+          if [ -z "${{ secrets.PERSONAL_TOKEN }}" ]; then
+            echo "PERSONAL_TOKEN is NOT set!"
+            exit 1
+          else
+            echo "PERSONAL_TOKEN is set and available."
+          fi
+
       # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v4
@@ -44,6 +54,16 @@ jobs:
     needs: build
 
     steps:
+      # Debug: Check if PERSONAL_TOKEN secret is available in deploy job
+      - name: Check if PERSONAL_TOKEN secret is available
+        run: |
+          if [ -z "${{ secrets.PERSONAL_TOKEN }}" ]; then
+            echo "PERSONAL_TOKEN is NOT set!"
+            exit 1
+          else
+            echo "PERSONAL_TOKEN is set and available."
+          fi
+
       # Checkout the code again (required for Azure deploy)
       - name: Checkout code
         uses: actions/checkout@v4
