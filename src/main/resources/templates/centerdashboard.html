@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Center Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; }
+        .centered { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        .dashboard { background: #fff; padding: 2rem 3rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+    </style>
+</head>
+<body>
+    <div class="centered">
+        <div class="dashboard">
+            <h1 style="margin-bottom: 0.5rem; color: #3b5998;">&#x267B; Waste Recycling Tracker</h1>
+            <div style="font-size: 0.95rem; color: #222; margin-bottom: 1rem;">Spring Boot Backend API</div>
+            <div style="background: #e6f9e6; color: #217a2b; padding: 0.5rem 1rem; border-radius: 5px; margin-bottom: 1.2rem;">
+                <b>&#x2714; Backend is running on port <span style="color:#007bff">8081</span></b>
+            </div>
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; width: 100%; max-width: 600px;">
+                <h3 style="margin-top:0;">&#x1F4C4; Available API Endpoints</h3>
+                <div style="margin-bottom: 1rem;">
+                    <b>Family Endpoints</b><br>
+                    <span style="font-size:0.9em; color:#888;">Base URL: <a href="http://localhost:8081/api/family" target="_blank">http://localhost:8081/api/family</a></span>
+                    <div style="margin-top:0.5em;">
+                        <div style="background:#fffbe6; padding:0.3em 0.7em; border-radius:4px; margin-bottom:0.2em; display:inline-block;">POST /api/family</div> Add a new waste entry<br>
+                        <div style="background:#fffbe6; padding:0.3em 0.7em; border-radius:4px; margin-bottom:0.2em; display:inline-block;">GET /api/family/{familyName}</div> Get all entries for a family<br>
+                        <div style="background:#fffbe6; padding:0.3em 0.7em; border-radius:4px; margin-bottom:0.2em; display:inline-block;">PUT /api/family/{id}</div> Update a waste entry<br>
+                        <div style="background:#fffbe6; padding:0.3em 0.7em; border-radius:4px; margin-bottom:0.2em; display:inline-block;">DELETE /api/family/{id}</div> Delete a waste entry
+                    </div>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <b>Center Endpoints</b><br>
+                    <span style="font-size:0.9em; color:#888;">Base URL: <a href="http://localhost:8081/api/center" target="_blank">http://localhost:8081/api/center</a></span>
+                    <div style="margin-top:0.5em;">
+                        <div style="background:#fffbe6; padding:0.3em 0.7em; border-radius:4px; margin-bottom:0.2em; display:inline-block;">GET /api/center</div> Get all waste entries from all families<br>
+                        <div style="background:#fffbe6; padding:0.3em 0.7em; border-radius:4px; margin-bottom:0.2em; display:inline-block;">PUT /api/center/{id}</div> Update the status of a waste entry<br>
+                        <div style="background:#fffbe6; padding:0.3em 0.7em; border-radius:4px; margin-bottom:0.2em; display:inline-block;">DELETE /api/center/{id}</div> Delete a recycled entry
+                    </div>
+                </div>
+            </div>
+            <div style="background: #f4f8ff; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; width: 100%; max-width: 600px;">
+                <h3 style="margin-top:0;">&#x1F50E; Tools & Resources</h3>
+                <a href="/h2-console" target="_blank" style="background:#e3e3ff; color:#2c3e50; padding:0.5em 1em; border-radius:5px; text-decoration:none; margin-right:0.5em;">H2 Database Console</a>
+                <a href="#" style="background:#e3e3ff; color:#2c3e50; padding:0.5em 1em; border-radius:5px; text-decoration:none;">Frontend (Vite)</a>
+            </div>
+            <div style="background: #fff; border-radius: 8px; padding: 1rem; width: 100%; max-width: 600px;">
+                <h3 style="margin-top:0;">&#x1F4D6; Documentation</h3>
+                <div style="font-size:0.95em;">
+                    For detailed API documentation, see the README.md in the backend folder.<br>
+                    <b>Database:</b> H2 in-memory database (auto-create tables enabled)
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
