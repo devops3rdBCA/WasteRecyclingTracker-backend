@@ -42,6 +42,13 @@ jobs:
       - name: List target dir contents # Optional debug for jar path
         run: ls -l target/
 
+      - name: Fail if no JAR found in target/
+        run: |
+          if ! ls target/*.jar 1> /dev/null 2>&1; then
+            echo "❌ No JAR file found in target/. Build failed or JAR not produced."
+            exit 1
+          fi
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -72,9 +79,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
+          path: java-app  # Specify output path so it lands in java-app/
 
-      - name: List java-app dir contents # Optional debug for artifact path
+      - name: List java-app dir contents # Debug for artifact path after download
         run: ls -l java-app/
+
+      - name: Fail if no JAR found in java-app/
+        run: |
+          if ! ls java-app/*.jar 1> /dev/null 2>&1; then
+            echo "❌ No JAR file found in java-app/. Artifact download problem."
+            exit 1
+          fi
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
