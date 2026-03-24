@@ -35,11 +35,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write
       contents: read
 
     steps:
-      - name: Checkout code   # ✅ FIX ADDED
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Download artifact
@@ -47,16 +46,11 @@ jobs:
         with:
           name: java-app
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F7A8FB3DE019441CAC8E0F9DE304D826 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4D18BAB319A1421F9D2AD72CD88C7528 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E1677122D71D4026AB33985ACE4E8C16 }}
+      # ❌ REMOVED azure/login (no more auth issues)
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'backend-rg'
-          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '*.jar'
