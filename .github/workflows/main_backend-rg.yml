@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read  # Read-only is fine since we are not pushing back
+  contents: read
 
 jobs:
   build:
@@ -24,25 +24,24 @@ jobs:
             echo "PERSONAL_TOKEN is set and available."
           fi
 
-      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
           persist-credentials: true
 
-      # Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # Build the Spring Boot app
       - name: Build with Maven
         run: mvn clean package
 
-      # Upload the JAR artifact
+      - name: List target dir contents # Optional debug for jar path
+        run: ls -l target/
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -54,7 +53,6 @@ jobs:
     needs: build
 
     steps:
-      # Debug: Check if PERSONAL_TOKEN secret is available in deploy job
       - name: Check if PERSONAL_TOKEN secret is available
         run: |
           if [ -z "${{ secrets.PERSONAL_TOKEN }}" ]; then
@@ -64,20 +62,20 @@ jobs:
             echo "PERSONAL_TOKEN is set and available."
           fi
 
-      # Checkout the code again (required for Azure deploy)
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
           persist-credentials: true
 
-      # Download the JAR artifact
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
 
-      # Deploy to Azure Web App
+      - name: List java-app dir contents # Optional debug for artifact path
+        run: ls -l java-app/
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
